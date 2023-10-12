@@ -2,10 +2,12 @@
 
 import React from 'react'
 import "leaflet/dist/leaflet.css"
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import "leaflet/dist/leaflet.js"
+import 'leaflet-defaulticon-compatibility'
 import { MapContainer, Marker, TileLayer, Tooltip, Popup } from "react-leaflet"
 
-const Maps = (props) => {
+const Map = (props) => {
   const { position, zoom } = props
 
   return (
@@ -23,4 +25,4 @@ const Maps = (props) => {
   )
 }
 
-export default Maps
+export default Map

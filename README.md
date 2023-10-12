@@ -23,3 +23,5 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 https://leafletjs.com/examples/quick-start/
 
 https://placekit.io/blog/articles/making-react-leaflet-work-with-nextjs-493i
+
+https://medium.com/@tomisinabiodun/displaying-a-leaflet-map-in-nextjs-85f86fccc10c

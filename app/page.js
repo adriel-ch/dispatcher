@@ -1,8 +1,16 @@
-import Maps from '@/components/Maps'
+import Map from '@/components/Map'
+import Image from 'next/image'
+
+export default function Home() {
+  return (
+    <Map/>
+  )
+}
+
 // import { useMemo } from 'react'
 // import dynamic from 'next/dynamic'
 
-export default function Home() {
+// insert into fn
   // const Map = useMemo(() => dynamic(
   //   () => import('@/components/Maps'),
   //   { 
@@ -10,10 +18,3 @@ export default function Home() {
   //     ssr: false
   //   }
   // ), [])
-
-  return (
-    <div style={{height: '100vh'}}>
-      <Maps/>
-    </div>
-  )
-}
