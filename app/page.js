@@ -1,9 +1,13 @@
-import Map from '@/components/Map'
-import Image from 'next/image'
+import dynamic from 'next/dynamic'
 
 export default function Home() {
+  const Map = dynamic(() => import('@/components/Map'),
+  {
+    loading: () => <p>A map is loading...</p>,
+    ssr: false
+  })
   return (
-    <Map/>
+    <Map zoom={10} />
   )
 }
 
