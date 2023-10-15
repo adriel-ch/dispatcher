@@ -1,13 +1,18 @@
+import Sidebar from '@/components/Sidebar'
 import dynamic from 'next/dynamic'
 
+const Map = dynamic(() => import('@/components/Map'),
+{
+  loading: () => <div className='p-2 m-2 text-xl'>A map is loading...</div>,
+  ssr: false
+})
+
 export default function Home() {
-  const Map = dynamic(() => import('@/components/Map'),
-  {
-    loading: () => <p>A map is loading...</p>,
-    ssr: false
-  })
   return (
-    <Map zoom={10} />
+    <section className='flex'>
+      <Sidebar/>
+      <Map zoom={10} />
+    </section>
   )
 }
 
