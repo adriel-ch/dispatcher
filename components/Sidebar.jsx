@@ -86,13 +86,13 @@ const BuildFlightList = ({ flightListArray, handleClickRoute }) => {
             // key={element._id}
             id={element._id}
             onClick={(e) => {
-              handleClickRoute(
-                element._id, // flightplan id
-                element.aircraftIdentification, // flight number
-                element.departure.departureAerodrome, // departure airport
-                element.arrival.destinationAerodrome, // arrival airport
-                element.filedRoute.routeElement // waypoint array
-              );
+              handleClickRoute({
+                id: element._id, // flightplan id
+                flightNumber: element.aircraftIdentification, // flight number
+                departure: { airport: element.departure.departureAerodrome, latitude: 0, longitude: 0 }, // departure airport
+                arrival: { airport: element.arrival.destinationAerodrome, latitude: 0, longitude: 0 }, // arrival airport
+                waypoints: element.filedRoute ? (element.filedRoute.routeElement) : ([]), // waypoint array
+              });
               flightListArray.forEach((element) => {
                 document.getElementById(element._id).className = "";
                 document.getElementById(element._id).className =
