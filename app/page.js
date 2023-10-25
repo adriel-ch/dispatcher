@@ -49,16 +49,16 @@ export default function Home() {
     //   },
     // ],
   });
-
+  
   const listAllFlights = async () => {
     console.log("Clicked List All");
     // https://app.swaggerhub.com/apis-docs/CAASFSDATMSE/flight-object-manager/1.0.0#/
     // Fetch data from /displayAll
-    // const response = await fetch(`/api/displayAll`);
-    // const responseJson = await response.json(); // returns an obj
+    const response = await fetch(`/api/displayAll`);
+    const responseJson = await response.json(); // returns an obj
     // console.log(responseJson)
-    setFlightPlanList(flightobject); // for testing
-    // setFlightPlanList(responseJson); // need to fix bad setstate
+    // // setFlightPlanList(flightobject); // for testing
+    setFlightPlanList(responseJson); // need to fix bad setstate
   };
 
   const handleClickRoute = async (obj) => {
