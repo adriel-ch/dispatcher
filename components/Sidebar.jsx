@@ -92,6 +92,7 @@ const BuildFlightList = ({ flightListArray, handleClickRoute }) => {
                 departure: { airport: element.departure.departureAerodrome, latitude: 0, longitude: 0 }, // departure airport
                 arrival: { airport: element.arrival.destinationAerodrome, latitude: 0, longitude: 0 }, // arrival airport
                 waypoints: element.filedRoute ? (element.filedRoute.routeElement) : ([]), // waypoint array
+                // airwayRoute: [{ airwayName: "", airwayPoints: [] }],
               });
               flightListArray.forEach((element) => {
                 document.getElementById(element._id).className = "";
