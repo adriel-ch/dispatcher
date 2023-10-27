@@ -49,6 +49,25 @@ export default function Home() {
     //   },
     // ],
   });
+
+  const handleSearch = async (searchTerm) => {
+    if (searchTerm) {
+      const flightName = searchTerm.replace(/ /g, "").toUpperCase(); // case sensitive data
+      console.log(flightName);
+      const response = await fetch(`/api/displayAll`);
+      const responseJson = await response.json(); // returns an obj
+      const filteredSearchResults = []
+      for (const element of responseJson.data) {
+        // console.log(element.aircraftIdentification.includes(flightName))
+        if (element.aircraftIdentification.includes(flightName)) {
+          // console.log(element)
+          filteredSearchResults.push(element)
+        }
+      }
+      console.log(filteredSearchResults)
+      setFlightPlanList(filteredSearchResults)
+    }
+  };
   
   const listAllFlights = async () => {
     console.log("Clicked List All");
@@ -57,8 +76,8 @@ export default function Home() {
     const response = await fetch(`/api/displayAll`);
     const responseJson = await response.json(); // returns an obj
     // console.log(responseJson)
-    // // setFlightPlanList(flightobject); // for testing
-    setFlightPlanList(responseJson); // need to fix bad setstate
+    // setFlightPlanList(flightobject); // for testing
+    setFlightPlanList(responseJson.data); // need to fix bad setstate
   };
 
   const handleClickRoute = async (obj) => {
@@ -511,8 +530,9 @@ export default function Home() {
     <section className="flex">
       <Sidebar
         handleListAllFlights={listAllFlights}
-        flightPlanList={flightPlanList}
+        flightPlanList={flightPlanList} // is a state
         handleClickRoute={handleClickRoute}
+        handleSearch={handleSearch}
       />
       <Map flightObject={flightRouteObject} />
     </section>

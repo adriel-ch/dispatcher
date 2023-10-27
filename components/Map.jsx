@@ -9,19 +9,45 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet/dist/leaflet.js"
 import { MapContainer, Marker, TileLayer, Popup, useMap, useMapEvent, Rectangle, Polyline, Tooltip, useMapEvents, FeatureGroup } from "react-leaflet"
 import { useEventHandlers } from '@react-leaflet/core';
-import { polyline, Icon } from 'leaflet';
+import { polyline, Icon, latLng, Path } from 'leaflet';
+import { GeodesicLine } from 'leaflet.geodesic';
+
+// class ReactGeodesicLine extends Path {
+//   createLeafletElement(props) {
+//     const { positions, options } = props
+//     return new GeodesicLine(positions, options)
+//   }
+
+//   updateLeafletElement(fromProps, toProps) {
+//     if (toProps.positions !== fromProps.positions) {
+//       this.leafletElement.setLatLngs(toProps.positions)
+//     }
+//     this.setStyleIfChanged(fromProps, toProps)
+//   }
+// }
 
 function ChangeView({ center, zoom, coordinateList }) {
   const map = useMap();
+  let line = new GeodesicLine([], {wrap: false}).addTo(map)
+  map.removeLayer(line)
   // map.flyTo(center, zoom);
   // create marker list based on
-  console.log(coordinateList)
-  // const polyline1 = polyline(coordinateList)
+  // console.log('coord list', coordinateList[0])
   if (coordinateList[0]) {
     map.fitBounds(polyline(coordinateList).getBounds())
+    line.setLatLngs(coordinateList)
   }
+  // const coordinateListLatLon = coordinateList.map((element) => (latLng(element[0], element[1])))
+  // console.log(coordinateListLatLon)
+  line = new GeodesicLine(coordinateList, {wrap: false}).addTo(map)
   return null;
 }
+
+// const Geoline = (coordinateList) => {
+//   const map = useMap()
+//   line = new GeodesicLine(coordinateList, {wrap: false}).addTo(map)
+//   return (<line></line>)
+// }
 
 const Map = ({ flightObject }) => {
   // build array of coords starting from departure, then list of route elements, finally arrival
@@ -59,8 +85,9 @@ const Map = ({ flightObject }) => {
       // setZoom(5)
     }
     const filtered = coords.filter((element) => element[0] !== null)
+    const coordinateListLatLon = filtered.map((element) => (latLng(element[0], element[1])))
     // console.log(filtered)
-    setCoordinateList(filtered)
+    setCoordinateList(coordinateListLatLon)
   }, [flightObject])
   // console.log(center)
   
@@ -72,11 +99,11 @@ const Map = ({ flightObject }) => {
         scrollWheelZoom={false}
         style={{ height: "100vh" }}
       >
-        <ChangeView
+        {/* <ChangeView
           // center={center}
           // zoom={zoom}
           coordinateList={coordinateList}
-        />
+        /> */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -87,8 +114,14 @@ const Map = ({ flightObject }) => {
           </Popup>
         </Marker> */}
         <FeatureGroup ref={features}>
+          <ChangeView
+            // center={center}
+            // zoom={zoom}
+            coordinateList={coordinateList}
+          />
           {/* {coordinateList ? <Polyline positions={coordinateList} /> : <></>} */}
-          <Polyline positions={coordinateList} />
+          {/* <Polyline positions={coordinateList} /> */}
+          {/* {coordinateList ? (e) => new GeodesicLine(coordinateList).addTo(useMap()) : ([])} */}
           {coordinateList.map((element, index) => (
             <Marker key={index} position={element} icon={greenIcon}>
               <Tooltip direction="top" /*offset={[-15, -5]}*/>

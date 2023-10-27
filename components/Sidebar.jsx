@@ -3,6 +3,8 @@
 import React from "react";
 import dynamic from "next/dynamic";
 
+import { roboto_mono } from "@/app/fonts";
+
 const Search = dynamic(() => import("@/components/TWE-components/Search"), {
   loading: () => <div className="p-2 m-2 text-xl text-black">loading...</div>,
   ssr: false,
@@ -77,6 +79,19 @@ const Search = dynamic(() => import("@/components/TWE-components/Search"), {
 
 const BuildFlightList = ({ flightListArray, handleClickRoute }) => {
   // takes input list/array and builds a button list for users to select flight number
+  const makeDate = (unixTimeStamp) => {
+    // console.log(unixTimeStamp)
+    const unixTimeStampMili = unixTimeStamp * 1000
+    const dateOfFlight = new Date(unixTimeStampMili).toISOString().slice(2,-8).replace("T", " ")
+    // console.log(dateOfFlight)
+    return dateOfFlight
+  }
+  const splitFlightNumber = (flightNumber) => {
+    const airline = flightNumber.slice(0,3)
+    const airlineNumber = flightNumber.slice(3)
+    const newFlightNumber = airline + "-" + airlineNumber
+    return newFlightNumber
+  }
   return (
     <div className="w-full text-black overflow-auto">
       {flightListArray.map((element) => (
@@ -89,9 +104,19 @@ const BuildFlightList = ({ flightListArray, handleClickRoute }) => {
               handleClickRoute({
                 id: element._id, // flightplan id
                 flightNumber: element.aircraftIdentification, // flight number
-                departure: { airport: element.departure.departureAerodrome, latitude: 0, longitude: 0 }, // departure airport
-                arrival: { airport: element.arrival.destinationAerodrome, latitude: 0, longitude: 0 }, // arrival airport
-                waypoints: element.filedRoute ? (element.filedRoute.routeElement) : ([]), // waypoint array
+                departure: {
+                  airport: element.departure.departureAerodrome,
+                  latitude: 0,
+                  longitude: 0,
+                }, // departure airport
+                arrival: {
+                  airport: element.arrival.destinationAerodrome,
+                  latitude: 0,
+                  longitude: 0,
+                }, // arrival airport
+                waypoints: element.filedRoute
+                  ? element.filedRoute.routeElement
+                  : [], // waypoint array
                 // airwayRoute: [{ airwayName: "", airwayPoints: [] }],
               });
               flightListArray.forEach((element) => {
@@ -108,9 +133,22 @@ const BuildFlightList = ({ flightListArray, handleClickRoute }) => {
             }}
             className="flex justify-between w-full cursor-pointer rounded-lg px-4 py-2 text-left transition duration-500 hover:bg-neutral-100 hover:text-neutral-500 focus:bg-neutral-100 focus:text-neutral-500 focus:ring-0 dark:hover:bg-neutral-600 dark:hover:text-neutral-200 dark:focus:bg-neutral-600 dark:focus:text-neutral-200"
           >
-            {element.aircraftIdentification}
+            <div>
+              {/* {element.aircraftIdentification} */}
+              {splitFlightNumber(element.aircraftIdentification)}
+            </div>
+            <div className={roboto_mono.className}>
+              {makeDate(element.departure.timeOfFlight)}
+            </div>
             <h1 id={element._id + "_icon"} hidden={true}>
-              A
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+              >
+                <path d="M120-120v-80h720v80H120Zm74-200L80-514l62-12 70 62 192-52-162-274 78-24 274 246 200-54q32-9 58 12t26 56q0 22-13.5 39T830-492L194-320Z" />
+              </svg>
             </h1>
           </button>
         </div>
@@ -123,17 +161,27 @@ const Sidebar = ({
   handleListAllFlights,
   flightPlanList,
   handleClickRoute,
+  handleSearch
 }) => {
   return (
-    <div className="flex-initial top-0 left-0 h-screen w-72 m-0 p-5 flex flex-col bg-white border-r-2 shadow-lg">
+    <div className="flex-initial top-0 left-0 h-screen w-80 m-0 p-4 flex flex-col bg-white border-r-2 shadow-lg">
       <h1 className="text-neutral-800 text-center text-3xl mb-4 leading-tight font-sans font-bold">
         Dispatcher
       </h1>
-      <Search />
+      <Search handleSearch={handleSearch} />
       <div className="flex gap-2 justify-evenly my-3">
         <button
-          type="button"
+          type="submit"
           className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+          onClick={(e) => {
+            const searchInput = document.getElementById("flightNumberSearchInput")
+            handleSearch(searchInput.value)
+            // if (searchInput.value) {
+            //   // console.log(searchInput.value)
+            //   // console.log('<', searchInput.value, '>')
+            //   handleSearch(searchInput.value)
+            // }
+          }}
         >
           Search
         </button>
@@ -147,7 +195,7 @@ const Sidebar = ({
       </div>
       <hr className="my-2 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       <BuildFlightList
-        flightListArray={flightPlanList.data ? (flightPlanList.data) : ([])}
+        flightListArray={flightPlanList ? (flightPlanList) : ([])}
         handleClickRoute={handleClickRoute}
       />
     </div>
