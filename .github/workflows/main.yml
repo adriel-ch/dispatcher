@@ -33,6 +33,7 @@ jobs:
       #     vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
       #     working-directory: ./sub-directory
   Deploy-Production:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
