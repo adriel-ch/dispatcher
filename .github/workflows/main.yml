@@ -2,8 +2,8 @@ name: GitHub Actions Vercel Production Deployment
 env:
   DATA_API_KEY: ${{ secrets.DATA_API_KEY }}
   DATA_API_IPADDRESS: ${{ secrets.DATA_API_IPADDRESS }}
-#   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-#   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID }}
 on:
   push:
     branches:
@@ -23,24 +23,24 @@ jobs:
           npm install
           npm run build --if-present
           npm test
-      - name: deploy
-        uses: amondnet/vercel-action@v20 #deploy
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
-          vercel-args: '--prod' #Optional
-          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
-          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
-          working-directory: ./sub-directory
-  # Deploy-Production:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Install Vercel CLI
-  #       run: npm install --global vercel@canary
-  #     - name: Pull Vercel Environment Information
-  #       run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-  #     - name: Build Project Artifacts
-  #       run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-  #     - name: Deploy Project Artifacts to Vercel
-  #       run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      # - name: deploy
+      #   uses: amondnet/vercel-action@v20 #deploy
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+      #     github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
+      #     vercel-args: '--prod' #Optional
+      #     vercel-org-id: ${{ secrets.ORG_ID}}  #Required
+      #     vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
+      #     working-directory: ./sub-directory
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Vercel CLI
+        run: npm install --global vercel@canary
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
