@@ -42,7 +42,7 @@ const search = ({ handleSearch }) => {
               clipRule="evenodd"
             />
           </svg>
-          Flight Number
+          Flight Number/Callsign
         </div>
       </label>
       <div

@@ -52,8 +52,9 @@ export default function Home() {
 
   const handleSearch = async (searchTerm) => {
     if (searchTerm) {
-      const flightName = searchTerm.replace(/ /g, "").toUpperCase(); // case sensitive data
-      console.log(flightName);
+      // Remove spaces and covert to upper case
+      const flightName = searchTerm.replace(/ /g, "").toUpperCase();
+      // console.log(flightName);
       const response = await fetch(`/api/displayAll`);
       const responseJson = await response.json(); // returns an obj
       const filteredSearchResults = []
@@ -64,7 +65,15 @@ export default function Home() {
           filteredSearchResults.push(element)
         }
       }
-      console.log(filteredSearchResults)
+      // Sort flights lexicographically
+      filteredSearchResults.sort((a, b) => {
+        const flightA = a.aircraftIdentification
+        const flightB = b.aircraftIdentification
+        if (flightA < flightB) return -1
+        if (flightA > flightB) return 1
+        return 0
+      })
+      // console.log(filteredSearchResults)
       setFlightPlanList(filteredSearchResults)
     }
   };
@@ -77,7 +86,7 @@ export default function Home() {
     const responseJson = await response.json(); // returns an obj
     // console.log(responseJson)
     // setFlightPlanList(flightobject); // for testing
-    setFlightPlanList(responseJson.data); // need to fix bad setstate
+    setFlightPlanList(responseJson.data);
   };
 
   const handleClickRoute = async (obj) => {
