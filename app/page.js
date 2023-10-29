@@ -4,7 +4,7 @@ import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import dynamic from "next/dynamic";
 
-import flightobject from "@/displayAll-schema.json"; // test json
+// import flightobject from "@/displayAll-schema.json"; // test json
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => <div className="p-2 m-2 text-xl">A map is loading...</div>,
@@ -93,8 +93,8 @@ export default function Home() {
     // https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
     const regexLatLon = /\(([^,]+),([^)]+)\)/;
     const regexPoint = /[a-zA-Z0-9]+/;
-    const regexAirways = /([a-zA-Z0-9]+)/;
-    const regexFixesFromAirways = /\[(.*?)\]/;
+    // const regexAirways = /([a-zA-Z0-9]+)/;
+    // const regexFixesFromAirways = /\[(.*?)\]/;
 
     // Returns a single object with latitude and longitude values or null if no match
     const processResponseJSON = (

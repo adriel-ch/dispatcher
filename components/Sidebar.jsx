@@ -173,7 +173,7 @@ const Sidebar = ({
   handleClickRoute,
   handleSearch
 }) => {
-  console.log(flightPlanList)
+  // console.log(flightPlanList)
   return (
     <div className="flex-initial top-0 left-0 h-screen w-80 m-0 p-4 flex flex-col bg-stone-50 border-r-2 shadow-lg">
       {/* <div className="flex justify-center">
